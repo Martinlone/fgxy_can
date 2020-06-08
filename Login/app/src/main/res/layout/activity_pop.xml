@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_plus1"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:textColor="#FFF5EE"
+        android:background="@drawable/border_pop"
+        android:text="@string/pop_scan"
+        android:gravity="right"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingEnd="30dp"
+
+        android:clickable="true"
+        android:focusable="true"/>
+    <View
+        android:layout_width="130dp"
+        android:layout_height="0.3dp"
+        android:alpha="0.7"/>
+    <TextView
+        android:id="@+id/tv_plus2"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:textColor="#FFF5EE"
+        android:background="@drawable/border_pop"
+        android:text="@string/logout"
+        android:gravity="right"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp"
+        android:clickable="true"
+        android:focusable="true" />
+    <View
+        android:layout_width="130dp"
+        android:layout_height="0.3dp"
+        android:alpha="0.7"/>
+    <TextView
+        android:id="@+id/tv_plus3"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:textColor="#FFF5EE"
+        android:background="@drawable/border_pop"
+        android:text="@string/wait_set"
+        android:gravity="right"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+
+
+</LinearLayout>
