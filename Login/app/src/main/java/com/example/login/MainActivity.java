@@ -181,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Looper.loop();
         } else {
             try {
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!1");
                 jsonObject.put("userName", username);
                 jsonObject.put("password", userpwd);
                 String content = String.valueOf(jsonObject);
@@ -203,9 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //写输出流，将要转的参数写入流
                 conn.getOutputStream().write(content.getBytes());
-
                 OutputStream os = conn.getOutputStream();
-                System.out.println("!!!!!!!SFSDGSDGHSHS");
                 os.write(content.getBytes());
                 os.close();
                 int code = conn.getResponseCode();

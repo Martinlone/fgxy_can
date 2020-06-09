@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -24,6 +25,9 @@ import com.example.google.zxing.activity.CaptureActivity;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.bouncycastle.util.encoders.Base64;
 import javax.crypto.Cipher;
 
@@ -33,6 +37,7 @@ public class PopWindowActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 111;
     TextView tvResult; // 结果
     TextView tvscan;
+    private Button btn_detail;
     //私玥
     public String privateKey = "MIICXQIBAAKBgQDlOJu6TyygqxfWT7eLtGDwajtNFOb9I5XRb6khyfD1Yt3YiCgQWMNW649887VGJiGr/L5i2osbl8C9+WJTeucF+S76xFxdU6jE0NQ+Z+zEdhUTooNRaY5nZiu5PgDB0ED/ZKBUSLKL7eibMxZtMlUDHjm4gwQco1KRMDSmXSMkDwIDAQABAoGAfY9LpnuWK5Bs50UVep5c93SJdUi82u7yMx4iHFMc/Z2hfenfYEzu+57fI4fvxTQ//5DbzRR/XKb8ulNv6+CHyPF31xk7YOBfkGI8qjLoq06V+FyBfDSwL8KbLyeHm7KUZnLNQbk8yGLzB3iYKkRHlmUanQGaNMIJziWOkN+N9dECQQD0ONYRNZeuM8zd8XJTSdcIX4a3gy3GGCJxOzv16XHxD03GW6UNLmfPwenKu+cdrQeaqEixrCejXdAFz/7+BSMpAkEA8EaSOeP5Xr3ZrbiKzi6TGMwHMvC7HdJxaBJbVRfApFrE0/mPwmP5rN7QwjrMY+0+AbXcm8mRQyQ1+IGEembsdwJBAN6az8Rv7QnD/YBvi52POIlRSSIMV7SwWvSK4WSMnGb1ZBbhgdg57DXaspcwHsFV7hByQ5BvMtIduHcT14ECfcECQATeaTgjFnqE/lQ22Rk0eGaYO80cc643BXVGafNfd9fcvwBMnk0iGX0XRsOozVt5AzilpsLBYuApa66NcVHJpCECQQDTjI2AQhFc1yRnCU/YgDnSpJVm1nASoRUnU8Jfm3Ozuku7JUXcVpt08DFSceCEX9unCuMcT72rAQlLpdZir876";
 
@@ -53,7 +58,7 @@ public class PopWindowActivity extends AppCompatActivity {
                 mPop.setFocusable(true);
                 mPop.showAsDropDown(btn_pop);
 
-                //扫一扫的TextView点击事件
+                //#######扫一扫的TextView点击事件
                 TextView tvPlus1 = view.findViewById(R.id.tv_plus1);
                 //获取资源图片
                 Drawable leftDrawable1 = getResources().getDrawable(R.drawable.scan);
@@ -70,8 +75,7 @@ public class PopWindowActivity extends AppCompatActivity {
                         startQrCode();
                     }
                 });
-
-                //退出登录的TextView点击事件
+                //########退出登录的TextView点击事件
                 TextView tvPlus2 = view.findViewById(R.id.tv_plus2);
                 //获取资源图片
                 Drawable leftDrawable2 = getResources().getDrawable(R.drawable.logout);
@@ -85,7 +89,6 @@ public class PopWindowActivity extends AppCompatActivity {
                         mPop.dismiss();
                         Intent intent = new Intent();
                         intent.setClass(PopWindowActivity.this,MainActivity.class);
-
                         intent.putExtra("auto", "0");
                         startActivity(intent);
                         finish();
@@ -131,14 +134,44 @@ public class PopWindowActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        btn_detail = findViewById(R.id.btn_detail);
         //扫描结果回调
         if (requestCode == Constant.REQ_QR_CODE && resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
             //将扫描出的信息显示出来
             try {
+                //张三;110222199504212210;green;2020-06-05-14-30-07
                 String scan_result =  decrypt(scanResult,privateKey);
-                tvResult.setText(scan_result);
+                String[] splitResult = scan_result.split(";");
+                switch (splitResult[2]){
+
+                }
+                String result = "姓名: " + splitResult[0] + System.getProperty ("line.separator") + "身份证号: " + splitResult[1] + System.getProperty ("line.separator") + "状态: " + splitResult[2] + System.getProperty ("line.separator") + "时间: " + splitResult[3].substring(0,10);
+                //为了使用高版本的方法需要这个装饰器
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat scanDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+                //获取二维码生成时间、时间戳
+                Date date1 = scanDate.parse(splitResult[3]); //固定格式的二维码生成时间
+                assert date1 != null;
+                long t1 = date1.getTime();
+                System.out.println(t1);
+                //获取当前时间
+                Date date2 = new Date();
+                String date3 = scanDate.format(date2);
+                Date date4 = scanDate.parse(date3); //固定格式的当前时间
+                assert date4 != null;
+                long t2 = date4.getTime();
+                System.out.println(t2);
+                //设置最大时间间隔600000毫秒
+                if(t2 - t1 > 600000){
+                    Toast toast = Toast.makeText(PopWindowActivity.this, "二维码已过期，请重新扫描！", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 10);
+                    toast.show();
+                }else{
+                    tvResult.setText(result);
+                    btn_detail.setVisibility(View.VISIBLE);
+                }
 
             } catch (Exception e) {
                 Toast toast = Toast.makeText(PopWindowActivity.this, R.string.scan_fail, Toast.LENGTH_LONG);
