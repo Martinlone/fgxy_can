@@ -27,6 +27,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userpwd = "0";
     private String username = "0";
     private String mysql_url = "https://credit.cjbdi.com/app/login";
+
     private Button btnName;   //用户名清空
     private Button btnPassword; //用户密码清空
     private Button btnLogin;    //登陆点击按钮
@@ -212,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //将数据输入流转化成String类型
                     String result = NetUtils.readString(inputStream);
                     JSONObject jsonObject1 = new JSONObject(result);
-                    System.out.println("@@@@###$#@" + jsonObject1.toString());
                     resultMsg = jsonObject1.getString("msg");
                     //登陆验证
                     if (resultMsg.equals("success")) {
@@ -221,10 +224,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         resultCode = jsonObject1.getString("code");
                         resultToken = jsonObject1.getString("token");
                         resultExpire = jsonObject1.getString("expire");
+
+                        //获取登陆时间的时间戳，也就是token生成的时间，半小时后失效
+                        Date date = new Date();
+                        long t2 = date.getTime();
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("ACCOUNTVALUE", username);
                         editor.putString("PASSWORDVALUE", userpwd);
                         editor.putString("LOGINTOKE", resultToken);
+                        editor.putString("EXPIRE", resultExpire);
+                        editor.putLong("CURRENTTIME",t2);
                         editor.apply();
                         Intent intent = new Intent();
                         intent.setClass(MainActivity.this, PopWindowActivity.class);
@@ -238,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Looper.loop();
                     }
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
