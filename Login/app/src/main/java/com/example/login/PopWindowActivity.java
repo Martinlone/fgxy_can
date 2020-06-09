@@ -135,6 +135,7 @@ public class PopWindowActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         btn_detail = findViewById(R.id.btn_detail);
+        String stateColor = "";
         //扫描结果回调
         if (requestCode == Constant.REQ_QR_CODE && resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
@@ -145,9 +146,19 @@ public class PopWindowActivity extends AppCompatActivity {
                 String scan_result =  decrypt(scanResult,privateKey);
                 String[] splitResult = scan_result.split(";");
                 switch (splitResult[2]){
-
+                    case "green":
+                        stateColor = "绿色";
+                        break;
+                    case "yellow":
+                        stateColor = "黄色";
+                        break;
+                    case "red":
+                        stateColor = "红色";
+                        break;
+                    default:
+                        break;
                 }
-                String result = "姓名: " + splitResult[0] + System.getProperty ("line.separator") + "身份证号: " + splitResult[1] + System.getProperty ("line.separator") + "状态: " + splitResult[2] + System.getProperty ("line.separator") + "时间: " + splitResult[3].substring(0,10);
+                String result = "姓名: " + splitResult[0] + System.getProperty ("line.separator") + "身份证号: " + splitResult[1] + System.getProperty ("line.separator") + "状态: " + stateColor + System.getProperty ("line.separator") + "时间: " + splitResult[3].substring(0,10);
                 //为了使用高版本的方法需要这个装饰器
                 @SuppressLint("SimpleDateFormat")
                 SimpleDateFormat scanDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
