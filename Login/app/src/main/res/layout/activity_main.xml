@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pretty_color"
     android:alpha="1"
-    android:orientation="horizontal">
+    android:orientation="vertical">
     <!--欢迎的logo-->
     <TextView
         android:id="@+id/login_string"
@@ -48,8 +48,6 @@
     <!--登陆输入账号和密码的框框-->
     <LinearLayout
         android:id="@+id/llt_name"
-        android:paddingTop="20dp"
-        android:layout_alignTop="@+id/login_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -84,8 +82,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:orientation="horizontal"
-        android:layout_marginTop="140dp"
-        android:paddingTop="20dp"
+
         >
         <!--密码输入框-->
         <EditText
@@ -113,24 +110,22 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_width="230dp"
+        android:layout_height="30dp"
         android:background="@drawable/logon_btn"
-        android:layout_marginTop="235dp"
         android:text="@string/login_click"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textColor="#008080"
-        android:layout_marginStart="132dp"/>
+        android:layout_gravity="center" />
 
     <Button
         android:id="@+id/btn_logon"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="30dp"
-        android:layout_marginLeft="215dp"
-        android:layout_marginTop="285dp"
         android:background="@drawable/logon_btn"
-        android:text="没有账号？点击注册"
-        android:textColor="#B22222"
-        android:textStyle="italic"
-        android:alpha="0.5"/>
-</RelativeLayout>
+        android:text="@string/logon_click"
+        android:textColor="#008080"
+        android:textSize="22sp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"/>
+</LinearLayout>

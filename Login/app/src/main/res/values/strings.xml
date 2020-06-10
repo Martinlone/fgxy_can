@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">法研码</string>
     <string name="login_string">Welcome ！</string>
-    <string name="login_click">登 录</string>
+    <string name="login_click">登录</string>
+    <string name="logon_click">注册</string>
     <string name="delete_logo">x</string>
     <string name="login_start">点击登录</string>
     <string name="login_page">中国法研码</string>
