@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("ACCOUNTVALUE", username);
                         editor.putString("PASSWORDVALUE", userpwd);
-                        editor.putString("LOGINTOKE", resultToken);
+                        editor.putString("LOGINTOKEN", resultToken);
                         editor.putString("EXPIRE", resultExpire);
                         editor.putLong("CURRENTTIME",t2);
                         editor.apply();

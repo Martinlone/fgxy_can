@@ -5,21 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#DCDCDC">
-    <LinearLayout
+    android:background="#C0C0C0">
+    <RelativeLayout
         android:id="@+id/bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="#D3D3D3">
+        android:background="#DEB887"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="法研码"
+            android:layout_marginStart="15dp"
             android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="#000000"
-            android:layout_marginStart="15dp"/>
+            android:text="法研码"
+            android:textColor="#FFFAFA"
+            android:textSize="20dp" />
 
         <Button
             android:id="@+id/btn_pop"
@@ -27,48 +28,74 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/plus"
+            android:layout_marginRight="50dp"
             android:gravity="center"
-            android:layout_marginLeft="250dp"
-            tools:ignore="RtlHardcoded"/>
+            android:layout_alignParentRight="true"
+            tools:ignore="RtlHardcoded"
+            android:visibility="invisible"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/txt_result"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="5dp"
-        android:scrollbars="vertical"
-        android:singleLine="false"
-        android:textColor="#000000"
-        android:textSize="22sp"
-        android:textStyle="normal" />
-    <Button
-        android:id="@+id/btn_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:text="查看详情"
-        android:textSize="15sp"
-        android:background="@drawable/btn_detail"
-        android:visibility="invisible"
-        android:layout_gravity="right"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"/>
-    <TextView
-        android:id="@+id/txt_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="5dp"
-        android:scrollbars="vertical"
-        android:singleLine="false"
-        android:textColor="#000000"
-        android:textSize="22sp"
-        android:textStyle="normal" />
+<!--    <TextView-->
+<!--        android:id="@+id/txt_result"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="170dp"-->
+<!--        android:layout_marginLeft="5dp"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:layout_marginRight="5dp"-->
+<!--        android:scrollbars="vertical"-->
+<!--        android:singleLine="false"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="22sp"-->
+<!--        android:textStyle="normal" />-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_detail"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="25dp"-->
+<!--        android:text="查看详情"-->
+<!--        android:textSize="15sp"-->
+<!--        android:background="@drawable/btn_detail"-->
+<!--        android:visibility="invisible"-->
+<!--        android:layout_gravity="right"-->
+<!--        android:layout_marginRight="15dp"-->
+<!--        android:layout_marginTop="5dp"/>-->
 
+<!--    <TextView-->
+<!--        android:id="@+id/txt_detail"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginLeft="5dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginRight="5dp"-->
+<!--        android:scrollbars="vertical"-->
+<!--        android:singleLine="false"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="22sp"-->
+<!--        android:textStyle="normal" />-->
+        <TextView
+            android:id="@+id/tv_scan_new"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="扫一扫"
+            android:textSize="19sp"
+            android:textColor="#000000"
+            android:gravity="left|center"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:paddingLeft="60dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="退出登录"
+            android:textSize="19sp"
+            android:textColor="#000000"
+            android:background="#DCDCDC"
+            android:gravity="left|center"
+            tools:ignore="RtlHardcoded"
+            android:paddingLeft="60dp"/>
 
 
 </LinearLayout>

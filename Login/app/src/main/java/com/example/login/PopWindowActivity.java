@@ -14,6 +14,8 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Handler;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.json.JSONArray;
@@ -52,9 +55,11 @@ public class PopWindowActivity extends AppCompatActivity {
     private Button btn_pop;
     private PopupWindow mPop;
     public static final int REQUEST_CODE = 111;
-    TextView tvResult; // 结果
-    TextView tvResult1;
-    TextView tvscan;
+    private TextView tvResult; // 结果
+    private TextView tvResult1;
+    private URL login_url = null;
+    private String detailApi = "";
+    private TextView tvscan;
     private Button btn_detail; //查看详情
     private String detail_url = "https://credit.cjbdi.com/app/getUserInfo?cardid=";//详情请求接口
     //私玥
@@ -63,6 +68,11 @@ public class PopWindowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //下次想新开新的线程处理主线程里面的ui
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        //
         setContentView(R.layout.activity_pop_window);
         btn_pop = (Button) findViewById(R.id.btn_pop);
         btn_pop.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +88,7 @@ public class PopWindowActivity extends AppCompatActivity {
                 mPop.showAsDropDown(btn_pop);
 
                 //#######扫一扫的TextView点击事件
-                TextView tvPlus1 = view.findViewById(R.id.tv_plus1);
+                TextView tvPlus1 = view.findViewById(R.id.tv_scan_new);
                 //获取资源图片
                 Drawable leftDrawable1 = getResources().getDrawable(R.drawable.scan);
                 //设置图片的尺寸，奇数位置后减前得到宽度，偶数位置后减前得到高度。
@@ -95,7 +105,7 @@ public class PopWindowActivity extends AppCompatActivity {
                     }
                 });
                 //########退出登录的TextView点击事件
-                TextView tvPlus2 = view.findViewById(R.id.tv_plus2);
+                TextView tvPlus2 = view.findViewById(R.id.tv_logout);
                 //获取资源图片
                 Drawable leftDrawable2 = getResources().getDrawable(R.drawable.logout);
                 //设置图片的尺寸，奇数位置后减前得到宽度，偶数位置后减前得到高度。
@@ -153,152 +163,20 @@ public class PopWindowActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String stateColor = "";
+
         //查看详情点击事件的触发
 
         //扫描结果回调
         if (requestCode == Constant.REQ_QR_CODE && resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
-            //将扫描出的信息显示出来
-            try {
-                //张三;110222199504212210;green;2020-06-05-14-30-07
-                String scan_result =  decrypt(scanResult,privateKey);
-                final String[] splitResult = scan_result.split(";");
-                switch (splitResult[2]){
-                    case "green":
-                        stateColor = "绿色";
-                        break;
-                    case "yellow":
-                        stateColor = "黄色";
-                        break;
-                    case "red":
-                        stateColor = "红色";
-                        break;
-                    default:
-                        break;
-                }
-                String result = "姓名: " + splitResult[0] + System.getProperty ("line.separator") + "身份证号: " + splitResult[1] + System.getProperty ("line.separator") + "状态: " + stateColor + System.getProperty ("line.separator") + "时间: " + splitResult[3].substring(0,10);
-                //为了使用高版本的方法需要这个装饰器
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat scanDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-                //获取二维码生成时间、时间戳
-                Date date1 = scanDate.parse(splitResult[3]); //固定格式的二维码生成时间
-                assert date1 != null;
-                long t1 = date1.getTime();
-                System.out.println(t1);
-                //获取当前时间
-                Date date2 = new Date();
-                String date3 = scanDate.format(date2);
-                Date date4 = scanDate.parse(date3); //固定格式的当前时间
-                assert date4 != null;
-                long t2 = date4.getTime();   //当前时间的时间戳
-                //设置最大时间间隔600000毫秒
-                if(t2 - t1 > 600000){
-                    Toast toast = Toast.makeText(PopWindowActivity.this, "二维码已过期，请重新扫描！", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 10);
-                    toast.show();
-                }else{
-                    tvResult.setText(result);
-                    btn_detail.setVisibility(View.VISIBLE);
 
-                    btn_detail = findViewById(R.id.btn_detail);
-                    btn_detail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            SharedPreferences sharedPreferences = getSharedPreferences("accountInfo",MainActivity.MODE_PRIVATE);
-                            String token = sharedPreferences.getString("LOGINTOKEN","");
-                            String expireTime = sharedPreferences.getString("EXPIRE","1800"); //token过期时间30分钟
-                            @SuppressLint("SimpleDateFormat")
-                            SimpleDateFormat scanDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-                            Date date = new Date();
-                            long t5 = date.getTime();   //当前时间的时间戳
-                            System.out.println(t5 + "！！！！！！！！！！！！这是当前的时间");
-                            long t3 = sharedPreferences.getLong("CURRENTTIME",0); //这是生成token的时间戳
-                            System.out.println(t3+"!!!!!!!!!!!!这是登陆生成token时间");
-                            if(t5 - t3 > 1800000){
-                                Toast toast = Toast.makeText(PopWindowActivity.this, "身份认证到期，请重新登陆！", Toast.LENGTH_LONG);
-                                toast.setGravity(Gravity.CENTER, 0, 10);
-                                toast.show();
-                            } else{
-
-                                //首先创建URL对象以及HttpURLConnection对象
-                                String detailApi = detail_url + splitResult[1] + "&token=" + token;
-                                URL login_url = null;
-                                try {
-                                    login_url = new URL(detailApi);
-                                    HttpURLConnection conn = (HttpURLConnection) login_url.openConnection();
-                                    //设置请求方法
-                                    conn.setRequestMethod("POST");
-                                    //设置超时时间
-                                    conn.setReadTimeout(5000);
-                                    conn.setConnectTimeout(5000);
-                                    //Post方式没法设置缓存，手动设置一下
-                                    conn.setUseCaches(false);
-                                    //设置请求类型
-                                    conn.setDoOutput(true);
-                                    conn.setDoInput(true);
-                                    conn.setRequestProperty("Connection", "Keep-Alive");
-                                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");//使用的是json请求类型
-                                    int code = conn.getResponseCode();
-                                    if (code == 200){
-                                        //发送成功，读取json数据
-                                        InputStream inputStream = conn.getInputStream();
-                                        //将数据输入流转化成String类型
-                                        String result = NetUtils.readString(inputStream);
-                                        JSONObject jsonObject1 = new JSONObject(result);
-                                        String resultMsg = jsonObject1.getString("msg");
-                                        if(resultMsg.equals("success")){
-                                            String all_detail = "";
-                                            JSONObject data = jsonObject1.getJSONObject("data");
-                                            int total = data.getInt("total");  //案件总数？
-
-                                            //注意：data中的内容带有中括号[]，所以要转化为JSONArray类型的对象
-                                            JSONArray xsayfb = data.getJSONArray("xsayfb");
-                                            for (int i = 0; i < total; i++) {
-                                                all_detail = all_detail  + "案由: " + xsayfb.getJSONObject(i).getString("xsay") + System.getProperty ("line.separator");
-                                            }
-                                            tvResult1.findViewById(R.id.txt_detail);
-                                            tvResult1.setText(all_detail);
-                                        }else{
-                                            Toast toast = Toast.makeText(PopWindowActivity.this, "未查到详细信息！", Toast.LENGTH_LONG);
-                                            toast.setGravity(Gravity.CENTER, 0, 10);
-                                            toast.show();
-                                        }
-                                    }
-
-                                } catch (IOException | JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                    });
-
-                }
-
-            } catch (Exception e) {
-                Toast toast = Toast.makeText(PopWindowActivity.this, R.string.scan_fail, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 10);
-                toast.show();
-            }
+            //跳转到结果展示界面
+            Intent intent = new Intent();
+            intent.setClass(PopWindowActivity.this,ResultDetailActivity.class);
+            intent.putExtra("scanResult", scanResult);
+            startActivity(intent);
+            finish();
         }
-    }
-// #################################################################################################
-    //RSA解密
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public String decrypt(String str, String privateKey) throws Exception{
-
-        java.security.Security.addProvider(
-                new org.bouncycastle.jce.provider.BouncyCastleProvider()
-        );
-        byte[] decodeKey = Base64.decode(privateKey);;
-        RSAPrivateKey privateKey2 = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decodeKey));
-        byte[] inputByte = Base64.decode(str.getBytes("UTF-8"));
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey2);
-        String outStr = new String(cipher.doFinal(inputByte));
-        System.out.println(outStr);
-        return outStr;
     }
 }
