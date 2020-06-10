@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             password_put_in.setText(userpwd);
         }
         //删除按钮点击事件
-        btnName = findViewById(R.id.btn_name);
-        btnName.setOnClickListener(this);
-        btnPassword = findViewById(R.id.btn_password);
-        btnPassword.setOnClickListener(this);
+//        btnName = findViewById(R.id.btn_name);
+//        btnName.setOnClickListener(this);
+//        btnPassword = findViewById(R.id.btn_password);
+//        btnPassword.setOnClickListener(this);
         //登陆按钮的点击事件
         btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(this);
