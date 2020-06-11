@@ -17,8 +17,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ResultDetailActivity"></activity>
-        <activity android:name=".scanActivity" />
+        <activity android:name=".CheckDetailActivity"></activity>
+        <activity android:name=".ResultDetailActivity" />
         <activity android:name=".PopWindowActivity" />
         <activity android:name="com.example.google.zxing.activity.CaptureActivity" />
         <activity android:name=".MainActivity">

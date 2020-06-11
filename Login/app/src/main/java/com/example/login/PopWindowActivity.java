@@ -52,8 +52,7 @@ import javax.crypto.Cipher;
 
 
 public class PopWindowActivity extends AppCompatActivity {
-    private Button btn_pop;
-    private PopupWindow mPop;
+
     public static final int REQUEST_CODE = 111;
     private TextView tvResult; // 结果
     private TextView tvResult1;
@@ -74,55 +73,38 @@ public class PopWindowActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         //
         setContentView(R.layout.activity_pop_window);
-        btn_pop = (Button) findViewById(R.id.btn_pop);
-        btn_pop.setOnClickListener(new View.OnClickListener() {
+
+        //#######扫一扫的TextView点击事件
+        TextView tvPlus1 = findViewById(R.id.tv_scan_new);
+        //获取资源图片
+        Drawable leftDrawable1 = getResources().getDrawable(R.drawable.scan);
+        //设置图片的尺寸，奇数位置后减前得到宽度，偶数位置后减前得到高度。
+        leftDrawable1.setBounds(10, 0, 75, 65);
+        //设置图片在TextView中的位置
+        tvPlus1.setCompoundDrawables(leftDrawable1, null, null, null);
+        tvPlus1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //对于一个没有被载入或者想要动态载入的界面，都需要使用LayoutInflater.inflate()来载入；
-                View view = getLayoutInflater().inflate(R.layout.activity_pop,null);
-                //设置这个view得出现位置 大小等信息
-                mPop = new PopupWindow(view,390, ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPop.setOutsideTouchable(true);
-                mPop.setFocusable(true);
-                mPop.showAsDropDown(btn_pop);
-
-                //#######扫一扫的TextView点击事件
-                TextView tvPlus1 = view.findViewById(R.id.tv_scan_new);
-                //获取资源图片
-                Drawable leftDrawable1 = getResources().getDrawable(R.drawable.scan);
-                //设置图片的尺寸，奇数位置后减前得到宽度，偶数位置后减前得到高度。
-                leftDrawable1.setBounds(10, 0, 80, 70);
-                //设置图片在TextView中的位置
-                tvPlus1.setCompoundDrawables(leftDrawable1, null, null, null);
-                tvPlus1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //扫一扫的点击事件
-                        tvResult = (TextView) findViewById(R.id.txt_result);
-                        mPop.dismiss();
-                        startQrCode();
-                    }
-                });
-                //########退出登录的TextView点击事件
-                TextView tvPlus2 = view.findViewById(R.id.tv_logout);
-                //获取资源图片
-                Drawable leftDrawable2 = getResources().getDrawable(R.drawable.logout);
-                //设置图片的尺寸，奇数位置后减前得到宽度，偶数位置后减前得到高度。
-                leftDrawable2.setBounds(10, 0, 80, 70);
-                //设置图片在TextView中的位置
-                tvPlus2.setCompoundDrawables(leftDrawable2, null, null, null);
-                tvPlus2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mPop.dismiss();
-                        Intent intent = new Intent();
-                        intent.setClass(PopWindowActivity.this,MainActivity.class);
-                        intent.putExtra("auto", "0");
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+                //扫一扫的点击事件
+                startQrCode();
+            }
+        });
+        //########退出登录的TextView点击事件
+        TextView tvPlus2 = findViewById(R.id.tv_logout);
+        //获取资源图片
+        Drawable leftDrawable2 = getResources().getDrawable(R.drawable.logout);
+        //设置图片的尺寸，奇数位置后减前得到宽度，偶数位置后减前得到高度。
+        leftDrawable2.setBounds(10, 0, 75, 65);
+        //设置图片在TextView中的位置
+        tvPlus2.setCompoundDrawables(leftDrawable2, null, null, null);
+        tvPlus2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(PopWindowActivity.this,MainActivity.class);
+                intent.putExtra("auto", "0");
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -176,7 +158,7 @@ public class PopWindowActivity extends AppCompatActivity {
             intent.setClass(PopWindowActivity.this,ResultDetailActivity.class);
             intent.putExtra("scanResult", scanResult);
             startActivity(intent);
-            finish();
+
         }
     }
 }

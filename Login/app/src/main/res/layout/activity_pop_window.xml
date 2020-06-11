@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#C0C0C0">
+    android:background="#C0C0C0"
+    android:fitsSystemWindows="true">
     <RelativeLayout
         android:id="@+id/bar"
         android:layout_width="match_parent"
@@ -21,18 +22,6 @@
             android:text="法研码"
             android:textColor="#FFFAFA"
             android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/btn_pop"
-            style="@android:style/Widget.DeviceDefault.Button.Borderless"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/plus"
-            android:layout_marginRight="50dp"
-            android:gravity="center"
-            android:layout_alignParentRight="true"
-            tools:ignore="RtlHardcoded"
-            android:visibility="invisible"/>
 
     </RelativeLayout>
 
@@ -79,9 +68,15 @@
             android:text="扫一扫"
             android:textSize="19sp"
             android:textColor="#000000"
-            android:gravity="left|center"
-            tools:ignore="RtlHardcoded,RtlSymmetry"
-            android:paddingLeft="60dp"/>
+            android:gravity="left"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/scanclick"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableLeft="@drawable/scan"
+            android:drawablePadding="20dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0.5dp"/>
@@ -92,10 +87,16 @@
             android:text="退出登录"
             android:textSize="19sp"
             android:textColor="#000000"
-            android:background="#DCDCDC"
+            android:background="@drawable/scanclick"
             android:gravity="left|center"
             tools:ignore="RtlHardcoded"
-            android:paddingLeft="60dp"/>
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableLeft="@drawable/logout"
+            android:drawablePadding="20dp"/>
 
 
 </LinearLayout>
